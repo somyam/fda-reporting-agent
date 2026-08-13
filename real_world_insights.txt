@@ -1,36 +1,46 @@
-================================================================================
+════════════════════════════════════════════════════════════════════════════════════════════════════════
 REAL-WORLD DRUG INSIGHTS
-================================================================================
-Generated: 2026-08-13 17:05:29
-Patient ID: PATIENT_D9FD325B
-================================================================================
+════════════════════════════════════════════════════════════════════════════════════════════════════════
+Generated : 2026-08-13 17:44:31
+Patient   : PATIENT_D9FD325B
+════════════════════════════════════════════════════════════════════════════════════════════════════════
 
-ADVERSE EVENTS / SIDE EFFECTS:
---------------------------------------------------------------------------------
+ADVERSE EVENTS
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+ #   Drug                   Effect                                   Severity  Outcome        Onset
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+ 1   Dupilumab (Dupixent)   Mild bilateral dry eye with conjunctiva… Mild      Not Recovered  2024-03-27
+ 2   Dupilumab (Dupixent)   Progression to severe bilateral conjunc… Serious   Recovering     2024-04-11
+     └─ continuation of #1 (same evolving event, not a separate one)
+     ⚠  stated onset interval disagrees with dates (2023-09-05 to 2024-04-11 = 219 days / 7.2 months)
 
-#1 ADVERSE EVENT
-   Drug: Dupilumab (Dupixent)
-   Effect: Mild bilateral dry eye with conjunctival injection, noted at routine follow-up approximately 6 weeks after initiating dupilumab. Patient managed with preservative-free artificial tears with some symptomatic relief. This represents the early/mild manifestation of dupilumab-associated ocular surface disease.
-   Severity: Mild
-   Outcome: Not Recovered
-   Time to Onset: Approximately 6-7 months after drug initiation (per visit sequence); consistent with typical onset window (weeks-months) for dupilumab-associated conjunctivitis
+BENEFICIAL EFFECTS
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+ #   Drug                   Effect                                   Magnitude Outcome        Observed
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+ 1   Dupilumab (Dupixent)   Patient also notes significant improvem… Signific… Improved       2024-03-27
+     └─ Mood / depression
+ 2   Dupilumab (Dupixent)   Atopic Dermatitis, mild, well-controlle… Document… Improved       2024-03-27
+     └─ Primary indication (eczema)
 
-#2 ADVERSE EVENT
-   Drug: Dupilumab (Dupixent)
-   Effect: Progression to severe bilateral conjunctivitis with periorbital edema, chemosis, thick mucopurulent discharge, photophobia, foreign body sensation, and superficial punctate keratitis on fluorescein staining. Associated with measurable decline in visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Symptoms progressively worsened over 2 weeks despite continued artificial tear use, occurring while patient remained on dupilumab (last dose 5 days prior to presentation). Required urgent same-day ophthalmology referral and discontinuation of dupilumab.
-   Severity: Serious
-   Outcome: Recovering
-   Time to Onset: Progressive worsening of pre-existing mild dupilumab-associated dry eye/conjunctivitis over approximately 2 weeks, occurring several months after drug initiation and after prior milder ocular symptoms were noted
+DETAIL
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+AE #1: Mild bilateral dry eye with conjunctival injection, noted at routine follow-up approximately 6 weeks after initiating dupilumab. Patient managed with preservative-free artificial tears with some symptomatic relief. This represents the early/mild manifestation of dupilumab-associated ocular surface disease.
+        time to onset: Approximately 6-7 months after drug initiation (per visit sequence); consistent with typical onset window (weeks-months) for dupilumab-associated conjunctivitis
 
+AE #2: Progression to severe bilateral conjunctivitis with periorbital edema, chemosis, thick mucopurulent discharge, photophobia, foreign body sensation, and superficial punctate keratitis on fluorescein staining. Associated with measurable decline in visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Symptoms progressively worsened over 2 weeks despite continued artificial tear use, occurring while patient remained on dupilumab (last dose 5 days prior to presentation). Required urgent same-day ophthalmology referral and discontinuation of dupilumab.
+        time to onset: Progressive worsening of pre-existing mild dupilumab-associated dry eye/conjunctivitis over approximately 2 weeks, occurring several months after drug initiation and after prior milder ocular symptoms were noted
 
-================================================================================
+BE #1: Patient also notes significant improvement in mood and depression symptoms since starting treatment - attributes this to better sleep quality and reduced stress from eczema improvement.
+
+BE #2: Atopic Dermatitis, mild, well-controlled on dupilumab
+
 SUMMARY
-================================================================================
-Total Insights: 2
-  - Adverse Events: 2
-  - Beneficial Effects: 0
-
-Note: This data represents real-world evidence from clinical practice.
-Adverse events are being reported to FDA MedWatch.
-Beneficial effects provide context for risk-benefit assessment.
-================================================================================
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Distinct adverse events  : 1   (2 presentation(s), 1 linked as continuations)
+ FDA-reportable           : 1
+ Beneficial effects       : 2
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+Distinct events count evolving presentations once - counting each
+presentation separately would inflate population-level incidence.
+════════════════════════════════════════════════════════════════════════════════════════════════════════
