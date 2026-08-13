@@ -1,0 +1,30 @@
+# Canonical copy of browser-use-demo/docker-compose.override.yml
+#
+# claude-quickstarts/ is a separate git checkout and is gitignored here, so a
+# file living only inside it is version controlled by neither repo. This is the
+# tracked original; the path Docker reads is a symlink back to this file.
+#
+# To restore after re-cloning claude-quickstarts:
+#   ln -sf ../../deploy/browser-use-demo.override.yml \
+#          claude-quickstarts/browser-use-demo/docker-compose.override.yml
+#
+# Local override — mounts VigilantAI case files into the browser-use container.
+# Compose merges this with docker-compose.yml automatically; the upstream
+# quickstart file stays untouched so submodule updates don't conflict.
+#
+# Mounted read-only: the agent reads case data, it never writes it.
+# patient_case.json and adverse_events_detected.json are deliberately NOT
+# mounted — both are pre-redaction, and Agent 3 is specified to work only
+# from de-identified data.
+services:
+  browser-use:
+    volumes:
+      # NOTE: agent3_browser_runner.py is deliberately NOT mounted here.
+      # A single-file bind mount pins the host inode at container start, so
+      # editing the runner leaves the container executing a frozen copy.
+      # browser_use_filler.py `docker cp`s it in before each run instead.
+      - ../../computer_use_prompt.txt:/home/browseruse/case_data/computer_use_prompt.txt:ro
+      - ../../patient_case_redacted.json:/home/browseruse/case_data/patient_case_redacted.json:ro
+      - ../../form_filling_instructions.md:/home/browseruse/case_data/form_filling_instructions.md:ro
+      - ../../fda_extracted_data.json:/home/browseruse/case_data/fda_extracted_data.json:ro
+      - ../../real_world_insights.txt:/home/browseruse/case_data/real_world_insights.txt:ro
