@@ -42,3 +42,10 @@ Thumbs.db
 
 # Logs
 *.log
+# Local virtualenv
+.venv/
+
+# Vendored quickstarts checkout (has its own .git — do not nest as a gitlink).
+# NOTE: browser-use-demo/docker-compose.override.yml lives in here and is NOT
+# version controlled by either repo. Back it up separately if it matters.
+claude-quickstarts/

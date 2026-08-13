@@ -1,19 +1,45 @@
-You are helping fill out FDA MedWatch Form 3500 for VOLUNTARY reporting of adverse events.
+You are filing FDA MedWatch Form 3500 (voluntary adverse event report).
 
-FDA FORM 3500 is used for reporting:
-- Prescription and OTC medicines
-- Biologics (blood components, gene therapies, cell/tissue transplants)
-- Medical devices
-- Combination products (pre-filled syringes, auto-injectors, inhalers)
-- Cosmetics
-- Cannabinoid/CBD products
+HOW TO WORK THIS FORM:
+1. navigate to https://www.accessdata.fda.gov/scripts/medwatch/index.cfm?action=professional.reporting1
+2. call read_page to get element refs for the current page's fields
+3. fill fields with form_input using those refs - refs are reliable, coordinates are not
+4. before advancing, call get_page_text and confirm each value you entered is present.
+   If a value did not land (dropdown reverted, field rejected the format), re-enter it.
+5. click the "Next"/"Continue" control to advance, then repeat from step 2
+6. keep going page by page until you reach the page bearing the final Submit button
 
-INSTRUCTIONS:
-1. Open Firefox and navigate to: https://www.accessdata.fda.gov/scripts/medwatch/index.cfm?action=professional.reporting1
-2. Take a screenshot to see the form fields
-3. Read each field label carefully and fill in the corresponding information below
-4. Handle multi-page forms by clicking "Next" or "Continue" buttons
-5. STOP before clicking the final "Submit" button - take a screenshot for human review
+This form spans multiple pages. Do not stop early because a page looks finished -
+only the Submit page is the end.
+
+CLICKING - THIS MATTERS:
+* ALWAYS click by ref (left_click ref=ref_N). NEVER click by coordinate.
+  Coordinates on this page are unreliable and have previously landed on footer
+  links instead of the Next button, throwing away a page of entered data.
+* Refs go stale after scrolling, navigation, or any DOM update. Call read_page
+  again to refresh them immediately before clicking, not from an earlier turn.
+* To find the Next control, use read_page or find - do not guess its position.
+
+RECOVERING FROM A WRONG PAGE:
+* `navigate` takes a FULL URL only. There is no "back" action, and
+  `navigate back` resolves to https://back/ and fails.
+* To go back one page, use: execute_js with `history.back()`
+* Do NOT re-navigate to the form's start URL to recover. That resets the form
+  and discards every field you have entered. Use history.back() instead.
+TABS:
+* Some MedWatch links open the form in a NEW TAB. This is handled for you - the
+  tool follows the new tab automatically. After a click that seems to do
+  nothing, just call read_page again; you are probably already on the new page.
+* Do NOT click the same link twice because "nothing happened". A second click
+  opens a duplicate tab, which triggers MedWatch's "already open in another tab"
+  dialog - and dismissing that dialog CLOSES the tab, losing all your work.
+* If that dialog does appear, do not click OK. Call read_page to re-orient.
+
+STOPPING CONDITION (HARD):
+When you reach the final Submit button, STOP. Do not click it. Take a screenshot
+and report which fields you filled and which you left blank for human review.
+A code-level guard will block the click anyway; treat that block as confirmation
+you are finished, not as an error to work around.
 
 PATIENT INFORMATION (DE-IDENTIFIED):
 - Patient Identifier: PATIENT_D9FD325B
@@ -21,82 +47,87 @@ PATIENT INFORMATION (DE-IDENTIFIED):
 - Sex: Female
 - Weight: 145 lbs
 
-ADVERSE EVENT INFORMATION:
-{
-  "suspect_product": {
-    "name": "Dupilumab",
-    "brand": "Dupixent",
-    "manufacturer": "Regeneron Pharmaceuticals, Inc.",
-    "lot_number": "DP45782A",
-    "ndc": "00024-5911-02",
-    "formulation": "300mg/2mL pre-filled syringe",
-    "indication": "Moderate-to-severe atopic dermatitis"
-  },
-  "adverse_event": {
-    "event_description": "Severe bilateral conjunctivitis with mucopurulent discharge, photophobia, and decreased visual acuity",
-    "onset_date": "2023-12-25 (estimated - gradual onset over 2 weeks prior to visit 5)",
-    "event_date_reported": "2024-01-08",
-    "severity": "Serious",
-    "seriousness_criteria": [
-      "Required intervention to prevent permanent impairment (vision)",
-      "Medically important event requiring urgent ophthalmology referral"
-    ],
-    "outcome": "Recovering/Resolving after drug discontinuation",
-    "causality_assessment": "Probable - dupilumab-related (known adverse effect, temporal relationship)"
-  },
-  "treatment_timeline": {
-    "start_date": "2023-09-05",
-    "end_date": "2024-01-03",
-    "total_duration": "120 days (approximately 4 months)",
-    "total_exposure": "9 doses (Loading: 600mg; Maintenance: 8 x 300mg = 2400mg; Total: 3000mg)",
-    "reason_for_discontinuation": "Severe bilateral conjunctivitis (serious adverse event)"
-  },
-  "concomitant_medications_at_time_of_event": [
-    "Artificial tears (preservative-free) - over the counter",
-    "Triamcinolone acetonide 0.1% cream - as needed (rarely used)",
-    "Moisturizers - daily"
-  ],
-  "labs_at_time_of_event": "No labs drawn at visit 5. Most recent labs from visit 3 (2023-09-06) were within normal limits.",
-  "reporter_information": {
-    "reporter_name": "Dr. REPO",
-    "reporter_type": "Healthcare Professional - Physician",
-    "specialty": "Dermatology",
-    "organization": "Clinic FACI",
-    "relationship_to_patient": "Treating physician",
-    "report_date": "2024-01-08"
-  }
-}
+ADVERSE EVENT(S) DETECTED:
+
+--- Adverse Event #1 ---
+Suspect Drug: Dupilumab (Dupixent)
+Event Description: Mild bilateral dry eye and conjunctival injection developing after initiation of dupilumab therapy. Patient reported mild eye dryness, managed with preservative-free artificial tears. Exam showed mild bilateral conjunctival injection without discharge; visual acuity normal at this stage.
+Severity: Mild
+Outcome: Not Recovered
+Causality: Probable
+Timeline:
+  - Drug Started: 2023-05-08
+  - Event Onset: 2024-03-27
+  - Drug Stopped: Ongoing
+  - Time to Onset: Reported at first follow-up visit after dupilumab initiation (dry eye symptoms noted at visit, exact onset unspecified but preceding this visit)
+
+Clinical Evidence: New onset of eye dryness and conjunctival injection following initiation of dupilumab, with no prior history of eye complaints. Provider explicitly attributed this to dupilumab as a 'known side effect' in the assessment. This mild finding subsequently progressed to a severe conjunctivitis at the next visit, supporting a causal, dose/time-dependent relationship.
+
+--- Adverse Event #2 ---
+Suspect Drug: Dupilumab (Dupixent)
+Event Description: Severe bilateral conjunctivitis with periorbital edema, chemosis, mucopurulent discharge, photophobia, foreign body sensation, superficial punctate keratitis on fluorescein staining, and decreased visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Progressed over 2 weeks despite artificial tear use. Required urgent same-day ophthalmology referral and permanent discontinuation of dupilumab.
+Severity: Serious
+Outcome: Recovering
+Causality: Probable
+Timeline:
+  - Drug Started: 2023-05-08
+  - Event Onset: 2024-04-11 (approx. 2 weeks prior to urgent visit on 2024-04-25, per patient report of progressive worsening)
+  - Drug Stopped: 2024-04-25
+  - Time to Onset: Progressive worsening over 2 weeks, evolving from previously documented mild conjunctival irritation noted at prior visit; occurred while on ongoing maintenance dosing (last injection 5 days prior to presentation)
+FDA Criteria Met: intervention required (urgent ophthalmology referral, drug discontinuation), disability (temporary decreased visual acuity, corneal involvement)
+
+Clinical Evidence: Clear temporal progression from mild dry eye/conjunctival injection (previous visit) to severe bilateral conjunctivitis with corneal involvement (punctate keratitis) and objective decline in visual acuity, occurring during ongoing dupilumab therapy. Symptoms did not respond to conservative measures (artificial tears). Positive dechallenge: dupilumab was discontinued specifically due to this event, with clinician documentation explicitly stating 'likely dupilumab-related' and 'known serious adverse effect.' Conjunctivitis (including severe/keratitis variants) is a recognized class effect of dupilumab, strengthening causality. Case was reported to FDA and manufacturer per documentation, and required urgent specialist intervention.
 
 CLINICAL ENCOUNTERS:
 
-Visit 1 - 2023-06-08:
+Visit 1 - 2023-06-08 (Office Visit - Dermatology)
   Chief Complaint: Worsening eczema on hands, arms, and neck
-  Assessment: N/A
+  History: Patient presents with 3-week history of worsening atopic dermatitis. Reports increased stress at work correlating with flare. Severe pruritus affecting sleep. Has been using over-the-counter hydrocortisone 1% with minimal relief. Denies recent changes in soaps, detergents, or diet.
+  Prescribed: Triamcinolone acetonide, strength=0.1%, form=Cream, dose=Apply thin layer, frequency=Twice daily, route=Topical
+    indication: Atopic dermatitis
+  Assessment/Plan: {"diagnoses": ["Atopic Dermatitis, moderate severity, acute flare"], "plan": ["Initiate triamcinolone acetonide 0.1% cream - apply BID to affected areas", "Continue liberal use of fragrance-free moisturizer", "Recommend bleach baths 2x weekly", "Avoid known triggers", "Follow-up in 4 weeks"]}
+  Outcome: Patient advised to follow up in 4 weeks or sooner if worsening
 
-Visit 2 - 2023-06-01:
+Visit 2 - 2023-06-01 (Follow-up Office Visit - Dermatology)
   Chief Complaint: Follow-up for atopic dermatitis - partial improvement
-  Assessment: N/A
+  History: Patient returns for 4-week follow-up. Reports moderate improvement with triamcinolone cream. Itching improved from 8/10 to 5/10. However, eczema on hands still bothersome with frequent hand washing at work. Compliance good with topical steroids.
+  Prescribed: Clobetasol propionate, strength=0.05%, form=Ointment, dose=Apply thin layer to hands only, frequency=Twice daily for 2 weeks, then taper, route=Topical
+    indication: Severe hand eczema
+  Prescribed: Triamcinolone acetonide, strength=0.1%, form=Cream, dose=Apply thin layer, frequency=Twice daily, route=Topical
+    indication: Atopic dermatitis - maintenance
+  Assessment/Plan: {"diagnoses": ["Atopic Dermatitis, moderate severity, improving"], "plan": ["Continue triamcinolone 0.1% cream for hands", "Add clobetasol propionate 0.05% ointment for hands (short-term, 2 weeks)", "Discuss systemic therapy options if no improvement", "Follow-up in 6 weeks"]}
+  Outcome: Patient to return in 6 weeks. Advised to call if worsening.
 
-Visit 3 - 2023-05-08:
+Visit 3 - 2023-05-08 (Office Visit - Dermatology)
   Chief Complaint: Inadequate control of eczema with topical steroids
-  Assessment: N/A
+  History: Patient returns reporting continued flares despite topical therapy. Used clobetasol as directed with temporary improvement, but eczema returned after discontinuation. Now affecting quality of life - difficulty working due to hand involvement. Patient interested in systemic therapy. Denies fever, weight loss, or other systemic symptoms.
+  Prescribed: Dupilumab, brand=Dupixent, strength=300mg/2mL, form=Pre-filled syringe, dose=600mg loading dose (day 1), then 300mg maintenance, frequency=Every 2 weeks, route=Subcutaneous injection
+    start_date: 2023-09-05
+    indication: Moderate-to-severe atopic dermatitis
+    lot_number: DP45782A
+    ndc: 00024-5911-02
+    manufacturer: Regeneron Pharmaceuticals
+  Assessment/Plan: {"diagnoses": ["Atopic Dermatitis, moderate-severe, inadequately controlled on topical therapy"], "plan": ["Initiate dupilumab (Dupixent) 600mg loading dose (two 300mg SC injections) today", "Followed by 300mg SC every 2 weeks", "Continue topical moisturizers", "Patient education on injection technique", "Baseline labs: CBC, CMP, eosinophil count", "Screen for helminth infection (endemic area history negative)", "Follow-up in 4 weeks to assess response"]}
+  Outcome: Loading dose administered in office without complications. Patient tolerated well. Follow-up scheduled.
 
-Visit 4 - 2024-03-27:
+Visit 4 - 2024-03-27 (Follow-up Office Visit - Dermatology)
   Chief Complaint: Follow-up after starting Dupixent - excellent improvement in eczema
-  Assessment: N/A
+  History: Patient returns for 6-week follow-up after initiating dupilumab. Reports dramatic improvement in eczema. Pruritus reduced from 7/10 to 2/10. Able to discontinue most topical steroids. Compliance excellent with self-injections every 2 weeks. Denies injection site reactions. Reports mild eye dryness but using artificial tears with relief. Patient also notes significant improvement in mood and depression symptoms since starting treatment - attributes this to better sleep quality and reduced stress from eczema improvement.
+  Current: Dupilumab, brand=Dupixent, strength=300mg/2mL, dose=300mg, frequency=Every 2 weeks, route=Subcutaneous
+  Current: Artificial tears (preservative-free), strength=N/A, dose=1-2 drops each eye, frequency=As needed, route=Ophthalmic
+  Assessment/Plan: {"diagnoses": ["Atopic Dermatitis, mild, well-controlled on dupilumab", "Dry eyes, likely related to dupilumab (known side effect)", "Improved mood/depression symptoms (likely secondary to improved eczema control and sleep quality)"], "plan": ["Continue dupilumab 300mg SC every 2 weeks", "Use preservative-free artificial tears PRN for dry eyes", "Reduce topical steroids to PRN only", "Continue emollients", "Monitor for conjunctivitis (known dupilumab side effect)", "Follow-up in 3 months or sooner if eye symptoms worsen"]}
+  Outcome: Excellent response to therapy. Continue current regimen. Return in 3 months.
 
-Visit 5 - 2024-04-25:
+Visit 5 - 2024-04-25 (Urgent Office Visit - Dermatology)
   Chief Complaint: Severe eye redness, pain, and discharge - worsening over past 2 weeks
-  Assessment: N/A
-
-
-FORM FILLING GUIDELINES:
-- Use the de-identified patient ID where patient name is requested
-- For dates, use the format DD-MMM-YYYY (e.g., 15-JAN-2024)
-- Fill in all available information from above
-- If a field asks for information not provided above, leave it blank or mark as "Unknown"
-- Take screenshots at each page transition
-- CRITICAL: Stop before final submission and show screenshot for human review
+  History: Patient calls requesting urgent appointment for severe eye symptoms. Reports progressively worsening bilateral conjunctivitis over past 2 weeks. Started as mild redness and dry sensation, now with significant pain, photophobia, mucopurulent discharge, especially in mornings. Vision slightly blurred. Has been using artificial tears without improvement. Denies trauma, contact lens use, or sick contacts. Eczema remains well-controlled. Last dupilumab injection 5 days ago. Very concerned about vision.
+  Prescribed: Erythromycin ophthalmic ointment, strength=0.5%, form=Ointment, dose=0.5-inch ribbon to lower conjunctival sac, frequency=Three times daily, route=Ophthalmic
+    indication: Bacterial conjunctivitis prophylaxis
+  Discontinued: Dupilumab, brand=Dupixent
+    last_dose_date: 2024-01-03
+    reason_for_discontinuation: Severe bilateral conjunctivitis (serious adverse event)
+  Assessment/Plan: {"diagnoses": ["Severe bilateral conjunctivitis, likely dupilumab-related", "Atopic Dermatitis, well-controlled"], "plan": ["DISCONTINUE dupilumab immediately due to severe conjunctivitis", "Refer to Ophthalmology urgently (same-day referral placed)", "Start erythromycin ophthalmic ointment 0.5% - apply to both eyes TID to rule out bacterial superinfection", "Preservative-free artificial tears every 2 hours while awake", "Cool compresses to eyes", "No contact lens use", "Return to dermatology in 2 weeks to reassess eczema control off dupilumab", "Discuss alternative systemic therapies if eczema flares", "Patient counseled on dupilumab discontinuation and conjunctivitis as known serious adverse effect"]}
+  Outcome: Dupilumab permanently discontinued. Patient to follow up with ophthalmology today and return to dermatology in 2 weeks. Adverse event reported to FDA and manufacturer.
 
 FDA MEDWATCH FORM 3500 SECTIONS:
 SECTION A - PATIENT INFORMATION
@@ -121,7 +152,7 @@ SECTION D - SUSPECT MEDICAL DEVICE (if applicable)
 - Leave blank for drug events
 
 SECTION E - REPORTER INFORMATION
-- Use "Automated System" or "Computer Use Demo" for reporter name
+- Use "Automated System" or "VigilantAI" for reporter name
 - Leave contact information blank or use placeholder
 
 SECTION F - CONCOMITANT MEDICAL PRODUCTS
@@ -130,4 +161,16 @@ SECTION F - CONCOMITANT MEDICAL PRODUCTS
 SECTION G - OTHER RELEVANT HISTORY
 - Include relevant medical history and lab data
 
-Begin by navigating to the FDA MedWatch portal and taking a screenshot of the initial form.
+FIELD CONVENTIONS:
+- Use the de-identified patient ID where patient name is requested
+- For dates, use the format DD-MMM-YYYY (e.g., 15-JAN-2024)
+- If a field asks for information not provided above, leave it blank or mark "Unknown"
+
+ADDITIONAL CONTEXT AVAILABLE:
+These files are readable in this container. Consult them with bash whenever a
+field needs detail this prompt does not carry:
+  /home/browseruse/case_data/patient_case_redacted.json
+  /home/browseruse/case_data/form_filling_instructions.md
+  /home/browseruse/case_data/fda_extracted_data.json
+
+Begin by navigating to the portal and calling read_page.

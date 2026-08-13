@@ -23,6 +23,36 @@
     "height": "5'6\"",
     "bmi": 23.4
   },
+  "medical_history": {
+    "chronic_conditions": [
+      "Atopic Dermatitis (diagnosed age 8)",
+      "Seasonal Allergies",
+      "Asthma (mild intermittent, well-controlled)"
+    ],
+    "past_surgeries": [],
+    "family_history": [
+      "Mother: Eczema, allergic rhinitis",
+      "Father: Asthma",
+      "Sibling: Food allergies"
+    ],
+    "allergies": [
+      {
+        "allergen": "Penicillin",
+        "reaction": "Rash",
+        "severity": "Moderate"
+      },
+      {
+        "allergen": "Pollen (seasonal)",
+        "reaction": "Rhinitis, congestion",
+        "severity": "Mild"
+      }
+    ],
+    "social_history": {
+      "smoking": "Never",
+      "alcohol": "Occasional",
+      "occupation": "Software Engineer"
+    }
+  },
   "encounters": [
     {
       "visit_number": 1,
@@ -384,41 +414,29 @@
       "outcome": "Dupilumab permanently discontinued. Patient to follow up with ophthalmology today and return to dermatology in 2 weeks. Adverse event reported to FDA and manufacturer."
     }
   ],
-  "adverse_events_detected": [
-    {
-      "suspect_drug": {
-        "generic_name": "dupilumab",
-        "brand_name": "Dupixent",
-        "dose": "unknown (not specified in encounter data)",
-        "route": "subcutaneous injection"
-      },
-      "adverse_event_description": "Severe ocular adverse event characterized by eye redness (conjunctival hyperemia), pain, and discharge developing approximately 2-3 months after initiation of dupilumab therapy. The symptom triad of redness, pain, and discharge is consistent with dupilumab-associated conjunctivitis/keratoconjunctivitis, a well-characterized but clinically significant adverse effect of IL-4/IL-13 pathway blockade. The severity descriptor 'severe' and the 2-week progressive worsening course prior to presentation suggest this is not a mild or self-limiting reaction. The involvement of pain (beyond simple irritation) raises concern for possible keratitis or blepharoconjunctivitis component, which can threaten vision if untreated.",
-      "severity": "Serious",
-      "outcome": "Unknown",
-      "causality": "Probable",
-      "timeline": {
-        "drug_start_date": "2023-10-16",
-        "event_onset_date": "2023-12-25",
-        "drug_stop_date": null,
-        "time_to_onset": "Approximately 10-11 weeks after drug initiation; symptoms noted as worsening over the 2 weeks prior to the January 8, 2024 visit, placing estimated onset around late December 2023"
-      },
-      "clinical_evidence": "1. TEMPORAL RELATIONSHIP: Ocular symptoms emerged after dupilumab initiation (Visit 4, ~Oct 16, 2023) and were absent in all prior visits (Visits 1-3), which focused exclusively on dermatologic complaints. The ~10-11 week onset window is consistent with published pharmacovigilance data showing dupilumab-associated conjunctivitis typically onset within weeks to months of treatment initiation. 2. KNOWN DRUG-AE PATTERN: Dupilumab-associated conjunctivitis is one of the most frequently reported adverse events in clinical trials and real-world data. The SOLO, CHRONOS, and CAF\u00c9 trials reported conjunctivitis rates of 14-28% in dupilumab-treated patients vs. 2-8% in placebo groups. The mechanism is hypothesized to involve IL-4/IL-13 blockade disrupting conjunctival goblet cell homeostasis and altering the ocular surface immune environment. 3. SEVERITY INDICATORS: The patient describes the event as 'severe,' with a progressive 2-week course prior to presentation. The presence of pain (not merely irritation or pruritus) elevates concern beyond simple allergic conjunctivitis and warrants ophthalmologic evaluation to rule out keratitis, corneal involvement, or secondary infection \u2014 all of which could result in permanent visual impairment if not promptly managed. 4. NO ALTERNATIVE ETIOLOGY IDENTIFIED: No new medications, infections, or environmental exposures are documented in the encounter data that would provide a competing explanation for the ocular symptoms. 5. INTERVENTION REQUIRED: The severity and progressive nature of symptoms necessitate medical intervention (ophthalmology referral, topical cyclosporine, corticosteroid eye drops, or consideration of dupilumab dose modification/discontinuation), meeting FDA seriousness criteria.",
-      "fda_reportable": true,
-      "fda_criteria_met": [
-        "intervention required (medical or surgical intervention needed to prevent permanent impairment \u2014 ophthalmologic evaluation and treatment required)",
-        "disability (potential for visual impairment if keratitis or corneal involvement is present and untreated)"
-      ],
-      "confidence_level": "High"
-    }
+  "treatment_timeline": {
+    "start_date": "2023-09-05",
+    "end_date": "2024-01-03",
+    "total_duration": "120 days (approximately 4 months)",
+    "total_exposure": "9 doses (Loading: 600mg; Maintenance: 8 x 300mg = 2400mg; Total: 3000mg)",
+    "reason_for_discontinuation": "Severe bilateral conjunctivitis (serious adverse event)"
+  },
+  "concomitant_medications_at_time_of_event": [
+    "Artificial tears (preservative-free) - over the counter",
+    "Triamcinolone acetonide 0.1% cream - as needed (rarely used)",
+    "Moisturizers - daily"
   ],
-  "has_reportable_event": true,
-  "detection_metadata": {
-    "model_used": "claude-sonnet-4-6",
-    "total_encounters_analyzed": 5,
-    "total_adverse_events_found": 1
+  "labs_at_time_of_event": "No labs drawn at visit 5. Most recent labs from visit 3 (2023-09-06) were within normal limits.",
+  "reporter_information": {
+    "reporter_name": "Dr. Sarah Chen, MD",
+    "reporter_type": "Healthcare Professional - Physician",
+    "specialty": "Dermatology",
+    "organization": "Community Dermatology Clinic",
+    "relationship_to_patient": "Treating physician",
+    "report_date": "2024-01-08"
   },
   "_redaction_metadata": {
-    "redacted_at": "2026-07-18T17:01:32.824825",
+    "redacted_at": "2026-08-13T16:04:04.593891",
     "redaction_method": "VigilantAI PHI Redactor v1.0",
     "hipaa_compliant": true,
     "safe_for_external_api": true

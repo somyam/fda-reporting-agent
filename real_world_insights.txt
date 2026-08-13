@@ -1,26 +1,33 @@
 ================================================================================
 REAL-WORLD DRUG INSIGHTS
 ================================================================================
-Generated: 2026-07-18 17:01:34
-Patient ID: PT-2847
+Generated: 2026-08-13 16:04:38
+Patient ID: PATIENT_D9FD325B
 ================================================================================
 
 ADVERSE EVENTS / SIDE EFFECTS:
 --------------------------------------------------------------------------------
 
 #1 ADVERSE EVENT
-   Drug: dupilumab (Dupixent)
-   Effect: Severe ocular adverse event characterized by eye redness (conjunctival hyperemia), pain, and discharge developing approximately 2-3 months after initiation of dupilumab therapy. The symptom triad of redness, pain, and discharge is consistent with dupilumab-associated conjunctivitis/keratoconjunctivitis, a well-characterized but clinically significant adverse effect of IL-4/IL-13 pathway blockade. The severity descriptor 'severe' and the 2-week progressive worsening course prior to presentation suggest this is not a mild or self-limiting reaction. The involvement of pain (beyond simple irritation) raises concern for possible keratitis or blepharoconjunctivitis component, which can threaten vision if untreated.
+   Drug: Dupilumab (Dupixent)
+   Effect: Mild bilateral dry eye and conjunctival injection developing after initiation of dupilumab therapy. Patient reported mild eye dryness, managed with preservative-free artificial tears. Exam showed mild bilateral conjunctival injection without discharge; visual acuity normal at this stage.
+   Severity: Mild
+   Outcome: Not Recovered
+   Time to Onset: Reported at first follow-up visit after dupilumab initiation (dry eye symptoms noted at visit, exact onset unspecified but preceding this visit)
+
+#2 ADVERSE EVENT
+   Drug: Dupilumab (Dupixent)
+   Effect: Severe bilateral conjunctivitis with periorbital edema, chemosis, mucopurulent discharge, photophobia, foreign body sensation, superficial punctate keratitis on fluorescein staining, and decreased visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Progressed over 2 weeks despite artificial tear use. Required urgent same-day ophthalmology referral and permanent discontinuation of dupilumab.
    Severity: Serious
-   Outcome: Unknown
-   Time to Onset: Approximately 10-11 weeks after drug initiation; symptoms noted as worsening over the 2 weeks prior to the January 8, 2024 visit, placing estimated onset around late December 2023
+   Outcome: Recovering
+   Time to Onset: Progressive worsening over 2 weeks, evolving from previously documented mild conjunctival irritation noted at prior visit; occurred while on ongoing maintenance dosing (last injection 5 days prior to presentation)
 
 
 ================================================================================
 SUMMARY
 ================================================================================
-Total Insights: 1
-  - Adverse Events: 1
+Total Insights: 2
+  - Adverse Events: 2
   - Beneficial Effects: 0
 
 Note: This data represents real-world evidence from clinical practice.

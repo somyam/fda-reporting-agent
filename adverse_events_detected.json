@@ -1,23 +1,23 @@
 {
   "patient_demographics": {
-    "patient_id": "PT-2847",
-    "patient_token": "PATIENT_TOKEN_2847",
-    "name_deidentified": "Patient A.M.",
+    "patient_id": "PATIENT_D9FD325B",
+    "patient_token": "PATIENT_D9FD325B",
+    "name_deidentified": "Patient N.J.",
     "age": 32,
-    "date_of_birth": "1992-03-15",
+    "date_of_birth": "1992-05-21",
     "sex": "Female",
     "gender": "Female",
     "race": "White",
     "ethnicity": "Not Hispanic or Latino",
     "address_deidentified": {
-      "city": "City_XYZ",
+      "city": "City_PAT",
       "state": "MA",
-      "zip": "021XX",
+      "zip": "XXXXX",
       "country": "US"
     },
     "contact_deidentified": {
-      "phone": "555-XXX-XXXX",
-      "email": "patient_XXXX@email.com"
+      "phone": "XXX-XXX-XXXX",
+      "email": "patient_PATIENT_@redacted.example"
     },
     "weight": "145 lbs",
     "height": "5'6\"",
@@ -27,10 +27,10 @@
     {
       "visit_number": 1,
       "encounter_id": "ENC-2847-001",
-      "date": "2023-06-12",
+      "date": "2023-06-08",
       "visit_type": "Office Visit - Dermatology",
-      "provider": "Dr. Sarah Chen, MD (Dermatology)",
-      "location": "Community Dermatology Clinic",
+      "provider": "Provider PROV, Dermatology",
+      "location": "Clinic FACI",
       "chief_complaint": "Worsening eczema on hands, arms, and neck",
       "history_of_present_illness": "Patient presents with 3-week history of worsening atopic dermatitis. Reports increased stress at work correlating with flare. Severe pruritus affecting sleep. Has been using over-the-counter hydrocortisone 1% with minimal relief. Denies recent changes in soaps, detergents, or diet.",
       "physical_exam": {
@@ -75,10 +75,10 @@
     {
       "visit_number": 2,
       "encounter_id": "ENC-2847-002",
-      "date": "2023-07-18",
+      "date": "2023-06-01",
       "visit_type": "Follow-up Office Visit - Dermatology",
-      "provider": "Dr. Sarah Chen, MD (Dermatology)",
-      "location": "Community Dermatology Clinic",
+      "provider": "Provider PROV, Dermatology",
+      "location": "Clinic FACI",
       "chief_complaint": "Follow-up for atopic dermatitis - partial improvement",
       "history_of_present_illness": "Patient returns for 4-week follow-up. Reports moderate improvement with triamcinolone cream. Itching improved from 8/10 to 5/10. However, eczema on hands still bothersome with frequent hand washing at work. Compliance good with topical steroids.",
       "physical_exam": {
@@ -134,10 +134,10 @@
     {
       "visit_number": 3,
       "encounter_id": "ENC-2847-003",
-      "date": "2023-09-05",
+      "date": "2023-05-08",
       "visit_type": "Office Visit - Dermatology",
-      "provider": "Dr. Sarah Chen, MD (Dermatology)",
-      "location": "Community Dermatology Clinic",
+      "provider": "Provider PROV, Dermatology",
+      "location": "Clinic FACI",
       "chief_complaint": "Inadequate control of eczema with topical steroids",
       "history_of_present_illness": "Patient returns reporting continued flares despite topical therapy. Used clobetasol as directed with temporary improvement, but eczema returned after discontinuation. Now affecting quality of life - difficulty working due to hand involvement. Patient interested in systemic therapy. Denies fever, weight loss, or other systemic symptoms.",
       "physical_exam": {
@@ -243,10 +243,10 @@
     {
       "visit_number": 4,
       "encounter_id": "ENC-2847-004",
-      "date": "2023-10-16",
+      "date": "2024-03-27",
       "visit_type": "Follow-up Office Visit - Dermatology",
-      "provider": "Dr. Sarah Chen, MD (Dermatology)",
-      "location": "Community Dermatology Clinic",
+      "provider": "Provider PROV, Dermatology",
+      "location": "Clinic FACI",
       "chief_complaint": "Follow-up after starting Dupixent - excellent improvement in eczema",
       "history_of_present_illness": "Patient returns for 6-week follow-up after initiating dupilumab. Reports dramatic improvement in eczema. Pruritus reduced from 7/10 to 2/10. Able to discontinue most topical steroids. Compliance excellent with self-injections every 2 weeks. Denies injection site reactions. Reports mild eye dryness but using artificial tears with relief. Patient also notes significant improvement in mood and depression symptoms since starting treatment - attributes this to better sleep quality and reduced stress from eczema improvement.",
       "physical_exam": {
@@ -302,10 +302,10 @@
     {
       "visit_number": 5,
       "encounter_id": "ENC-2847-005",
-      "date": "2024-01-08",
+      "date": "2024-04-25",
       "visit_type": "Urgent Office Visit - Dermatology",
-      "provider": "Dr. Sarah Chen, MD (Dermatology)",
-      "location": "Community Dermatology Clinic",
+      "provider": "Provider PROV, Dermatology",
+      "location": "Clinic FACI",
       "chief_complaint": "Severe eye redness, pain, and discharge - worsening over past 2 weeks",
       "history_of_present_illness": "Patient calls requesting urgent appointment for severe eye symptoms. Reports progressively worsening bilateral conjunctivitis over past 2 weeks. Started as mild redness and dry sensation, now with significant pain, photophobia, mucopurulent discharge, especially in mornings. Vision slightly blurred. Has been using artificial tears without improvement. Denies trauma, contact lens use, or sick contacts. Eczema remains well-controlled. Last dupilumab injection 5 days ago. Very concerned about vision.",
       "physical_exam": {
@@ -374,7 +374,7 @@
       "referrals": [
         {
           "specialty": "Ophthalmology",
-          "provider": "Dr. Michael Torres, MD",
+          "provider": "Dr. REF_",
           "urgency": "Urgent - same day",
           "reason": "Severe bilateral conjunctivitis with visual changes, likely dupilumab-related",
           "appointment_scheduled": "2024-01-08 (same day at 3:00 PM)"
@@ -387,34 +387,56 @@
   "adverse_events_detected": [
     {
       "suspect_drug": {
-        "generic_name": "dupilumab",
+        "generic_name": "Dupilumab",
         "brand_name": "Dupixent",
-        "dose": "unknown (not specified in encounter data)",
-        "route": "subcutaneous injection"
+        "dose": "300mg (after 600mg loading dose)",
+        "route": "Subcutaneous injection"
       },
-      "adverse_event_description": "Severe ocular adverse event characterized by eye redness (conjunctival hyperemia), pain, and discharge developing approximately 2-3 months after initiation of dupilumab therapy. The symptom triad of redness, pain, and discharge is consistent with dupilumab-associated conjunctivitis/keratoconjunctivitis, a well-characterized but clinically significant adverse effect of IL-4/IL-13 pathway blockade. The severity descriptor 'severe' and the 2-week progressive worsening course prior to presentation suggest this is not a mild or self-limiting reaction. The involvement of pain (beyond simple irritation) raises concern for possible keratitis or blepharoconjunctivitis component, which can threaten vision if untreated.",
-      "severity": "Serious",
-      "outcome": "Unknown",
+      "adverse_event_description": "Mild bilateral dry eye and conjunctival injection developing after initiation of dupilumab therapy. Patient reported mild eye dryness, managed with preservative-free artificial tears. Exam showed mild bilateral conjunctival injection without discharge; visual acuity normal at this stage.",
+      "severity": "Mild",
+      "outcome": "Not Recovered",
       "causality": "Probable",
       "timeline": {
-        "drug_start_date": "2023-10-16",
-        "event_onset_date": "2023-12-25",
+        "drug_start_date": "2023-05-08",
+        "event_onset_date": "2024-03-27",
         "drug_stop_date": null,
-        "time_to_onset": "Approximately 10-11 weeks after drug initiation; symptoms noted as worsening over the 2 weeks prior to the January 8, 2024 visit, placing estimated onset around late December 2023"
+        "time_to_onset": "Reported at first follow-up visit after dupilumab initiation (dry eye symptoms noted at visit, exact onset unspecified but preceding this visit)"
       },
-      "clinical_evidence": "1. TEMPORAL RELATIONSHIP: Ocular symptoms emerged after dupilumab initiation (Visit 4, ~Oct 16, 2023) and were absent in all prior visits (Visits 1-3), which focused exclusively on dermatologic complaints. The ~10-11 week onset window is consistent with published pharmacovigilance data showing dupilumab-associated conjunctivitis typically onset within weeks to months of treatment initiation. 2. KNOWN DRUG-AE PATTERN: Dupilumab-associated conjunctivitis is one of the most frequently reported adverse events in clinical trials and real-world data. The SOLO, CHRONOS, and CAF\u00c9 trials reported conjunctivitis rates of 14-28% in dupilumab-treated patients vs. 2-8% in placebo groups. The mechanism is hypothesized to involve IL-4/IL-13 blockade disrupting conjunctival goblet cell homeostasis and altering the ocular surface immune environment. 3. SEVERITY INDICATORS: The patient describes the event as 'severe,' with a progressive 2-week course prior to presentation. The presence of pain (not merely irritation or pruritus) elevates concern beyond simple allergic conjunctivitis and warrants ophthalmologic evaluation to rule out keratitis, corneal involvement, or secondary infection \u2014 all of which could result in permanent visual impairment if not promptly managed. 4. NO ALTERNATIVE ETIOLOGY IDENTIFIED: No new medications, infections, or environmental exposures are documented in the encounter data that would provide a competing explanation for the ocular symptoms. 5. INTERVENTION REQUIRED: The severity and progressive nature of symptoms necessitate medical intervention (ophthalmology referral, topical cyclosporine, corticosteroid eye drops, or consideration of dupilumab dose modification/discontinuation), meeting FDA seriousness criteria.",
+      "clinical_evidence": "New onset of eye dryness and conjunctival injection following initiation of dupilumab, with no prior history of eye complaints. Provider explicitly attributed this to dupilumab as a 'known side effect' in the assessment. This mild finding subsequently progressed to a severe conjunctivitis at the next visit, supporting a causal, dose/time-dependent relationship.",
+      "fda_reportable": false,
+      "fda_criteria_met": [],
+      "confidence_level": "Medium"
+    },
+    {
+      "suspect_drug": {
+        "generic_name": "Dupilumab",
+        "brand_name": "Dupixent",
+        "dose": "300mg every 2 weeks",
+        "route": "Subcutaneous injection"
+      },
+      "adverse_event_description": "Severe bilateral conjunctivitis with periorbital edema, chemosis, mucopurulent discharge, photophobia, foreign body sensation, superficial punctate keratitis on fluorescein staining, and decreased visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Progressed over 2 weeks despite artificial tear use. Required urgent same-day ophthalmology referral and permanent discontinuation of dupilumab.",
+      "severity": "Serious",
+      "outcome": "Recovering",
+      "causality": "Probable",
+      "timeline": {
+        "drug_start_date": "2023-05-08",
+        "event_onset_date": "2024-04-11 (approx. 2 weeks prior to urgent visit on 2024-04-25, per patient report of progressive worsening)",
+        "drug_stop_date": "2024-04-25",
+        "time_to_onset": "Progressive worsening over 2 weeks, evolving from previously documented mild conjunctival irritation noted at prior visit; occurred while on ongoing maintenance dosing (last injection 5 days prior to presentation)"
+      },
+      "clinical_evidence": "Clear temporal progression from mild dry eye/conjunctival injection (previous visit) to severe bilateral conjunctivitis with corneal involvement (punctate keratitis) and objective decline in visual acuity, occurring during ongoing dupilumab therapy. Symptoms did not respond to conservative measures (artificial tears). Positive dechallenge: dupilumab was discontinued specifically due to this event, with clinician documentation explicitly stating 'likely dupilumab-related' and 'known serious adverse effect.' Conjunctivitis (including severe/keratitis variants) is a recognized class effect of dupilumab, strengthening causality. Case was reported to FDA and manufacturer per documentation, and required urgent specialist intervention.",
       "fda_reportable": true,
       "fda_criteria_met": [
-        "intervention required (medical or surgical intervention needed to prevent permanent impairment \u2014 ophthalmologic evaluation and treatment required)",
-        "disability (potential for visual impairment if keratitis or corneal involvement is present and untreated)"
+        "intervention required (urgent ophthalmology referral, drug discontinuation)",
+        "disability (temporary decreased visual acuity, corneal involvement)"
       ],
       "confidence_level": "High"
     }
   ],
   "has_reportable_event": true,
   "detection_metadata": {
-    "model_used": "claude-sonnet-4-6",
+    "model_used": "claude-sonnet-5",
     "total_encounters_analyzed": 5,
-    "total_adverse_events_found": 1
+    "total_adverse_events_found": 2
   }
 }

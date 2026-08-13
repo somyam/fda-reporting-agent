@@ -21,7 +21,7 @@ class AdverseEventDetector:
             raise ValueError("ANTHROPIC_API_KEY not set")
 
         self.client = Anthropic(api_key=self.api_key)
-        self.model = "claude-sonnet-4-6"
+        self.model = "claude-sonnet-5"
 
     def detect_adverse_events(self, patient_data: Dict) -> Dict:
         """
@@ -49,7 +49,7 @@ class AdverseEventDetector:
         encounter_summary = self._prepare_encounter_summary(encounters)
 
         # Call Claude to analyze encounters
-        adverse_events = self._analyze_with_claude(demographics, encounter_summary, encounters)
+        adverse_events = self._analyze_with_claude(demographics, encounter_summary)
 
         # Determine if any events are reportable
         has_reportable = any(
@@ -110,28 +110,53 @@ class AdverseEventDetector:
         """
         summary = []
         for idx, enc in enumerate(encounters, 1):
-            encounter_text = f"\nVisit {idx} - {enc.get('date', 'Unknown Date')}:\n"
-            encounter_text += f"  Chief Complaint: {enc.get('chief_complaint', 'N/A')}\n"
+            encounter_text = f"\nVisit {idx} - {enc.get('date', 'Unknown Date')}"
+            if enc.get('visit_type'):
+                encounter_text += f" ({enc['visit_type']})"
+            encounter_text += f"\n  Chief Complaint: {enc.get('chief_complaint', 'N/A')}\n"
 
-            if enc.get('medications'):
-                encounter_text += f"  Medications:\n"
-                for med in enc['medications']:
-                    encounter_text += f"    - {med.get('name', 'Unknown')} {med.get('dose', '')} {med.get('route', '')}\n"
+            if enc.get('history_of_present_illness'):
+                encounter_text += f"  History: {enc['history_of_present_illness']}\n"
 
-            if enc.get('assessment'):
-                encounter_text += f"  Assessment: {enc.get('assessment')}\n"
+            # Medications are split across three keys depending on status - all
+            # three matter for causality (what started it, what was stopped, when).
+            for key, label in (
+                ("medications_prescribed", "Prescribed"),
+                ("medications_current", "Current"),
+                ("medications_discontinued", "Discontinued"),
+            ):
+                for med in enc.get(key) or []:
+                    parts = [str(med.get('name', 'Unknown'))]
+                    for field in ("brand", "strength", "form", "dose", "frequency", "route"):
+                        if med.get(field):
+                            parts.append(f"{field}={med[field]}")
+                    encounter_text += f"  {label}: {', '.join(parts)}\n"
+                    for field in ("start_date", "last_dose_date", "indication",
+                                  "reason_for_discontinuation", "lot_number", "ndc",
+                                  "manufacturer"):
+                        if med.get(field):
+                            encounter_text += f"    {field}: {med[field]}\n"
 
-            if enc.get('notes'):
-                encounter_text += f"  Notes: {enc.get('notes')}\n"
+            if enc.get('physical_exam'):
+                encounter_text += f"  Physical Exam: {json.dumps(enc['physical_exam'])}\n"
 
-            if enc.get('vitals'):
-                encounter_text += f"  Vitals: {json.dumps(enc['vitals'])}\n"
+            if enc.get('assessment_and_plan'):
+                encounter_text += f"  Assessment/Plan: {json.dumps(enc['assessment_and_plan'])}\n"
+
+            if enc.get('labs_resulted'):
+                encounter_text += f"  Labs: {json.dumps(enc['labs_resulted'])}\n"
+
+            if enc.get('referrals'):
+                encounter_text += f"  Referrals: {json.dumps(enc['referrals'])}\n"
+
+            if enc.get('outcome'):
+                encounter_text += f"  Outcome: {enc['outcome']}\n"
 
             summary.append(encounter_text)
 
         return "".join(summary)
 
-    def _analyze_with_claude(self, demographics: Dict, encounter_summary: str, encounters: List[Dict]) -> List[Dict]:
+    def _analyze_with_claude(self, demographics: Dict, encounter_summary: str) -> List[Dict]:
         """
         Use Claude to analyze encounters and identify adverse drug events
         """
@@ -214,7 +239,6 @@ IMPORTANT:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=4096,
-                temperature=0,
                 messages=[{
                     "role": "user",
                     "content": analysis_prompt
@@ -222,7 +246,11 @@ IMPORTANT:
             )
 
             # Extract JSON from response
-            response_text = response.content[0].text
+            # Handle both text blocks and thinking blocks
+            response_text = ""
+            for block in response.content:
+                if hasattr(block, 'text'):
+                    response_text += block.text
 
             # Try to parse JSON
             # Look for JSON block in response

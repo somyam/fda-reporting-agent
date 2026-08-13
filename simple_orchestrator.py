@@ -1,13 +1,14 @@
 """
 VigilantAI - Autonomous Adverse Event Reporting Pipeline
-Agent 1: Adverse Event Detection → Agent 2: PHI Redaction → Agent 3: Computer Use Form Submission
+Agent 1: PHI Redaction → Agent 2: Adverse Event Detection → Agent 3: Computer Use Form Submission
+Redaction runs first so nothing unredacted is ever sent to an external API.
 """
 
 import json
 import threading
 from agent_1_adverse_event_detector import AdverseEventDetector
 from agent_1_phi_redactor import PHIRedactor
-from simple_computer_use_filler import SimpleComputerUseFiller
+from browser_use_filler import BrowserUseFormFiller
 from agent_4_real_world_insights import RealWorldInsightsLogger
 
 
@@ -25,17 +26,33 @@ def main():
     if "adverse_event_summary" in patient_data:
         del patient_data["adverse_event_summary"]
 
-    # AGENT 1: Adverse Event Detection
-    print("Analyzing patient encounters for adverse drug events...")
+    # AGENT 1: PHI Redaction
+    # Runs FIRST so no unredacted PHI is ever sent to an external API.
+    print("\nAGENT 1: PHI REDACTOR")
+
+    phi_redactor = PHIRedactor()
+    redacted_data = phi_redactor.redact_patient_data(patient_data)
+
+    # Save redacted data
+    with open("patient_case_redacted.json", "w") as f:
+        json.dump(redacted_data, f, indent=2)
+
+    print(f"\n✅ Agent 1 Complete")
+    print(f"   Output: patient_case_redacted.json")
+
+    # AGENT 2: Adverse Event Detection
+    # Operates only on the de-identified copy produced by Agent 1.
+    print("\nAGENT 2: ADVERSE EVENT DETECTOR")
+    print("Analyzing de-identified encounters for adverse drug events...")
 
     detector = AdverseEventDetector()
-    detected_data = detector.detect_adverse_events(patient_data)
+    detected_data = detector.detect_adverse_events(redacted_data)
 
-    # Save detected events
+    # Save detected events - already de-identified, inherited from Agent 1
     with open("adverse_events_detected.json", "w") as f:
         json.dump(detected_data, f, indent=2)
 
-    print(f"\n✅ Agent 1 Complete")
+    print(f"\n✅ Agent 2 Complete")
     print(f"   Output: adverse_events_detected.json")
     print(f"   Adverse Events Found: {len(detected_data['adverse_events_detected'])}")
 
@@ -47,39 +64,18 @@ def main():
         print("Pipeline stopped - no adverse events identified in patient encounters.")
         return
 
-    # AGENT 2: PHI Redaction
-    print("\nAGENT 2: PHI REDACTOR")
-    print("🔒 PHI Redactor Agent Starting...")
-    print("=" * 60)
-
-    phi_redactor = PHIRedactor()
-
-    print("  → Redacting patient demographics...")
-    print("  → Redacting encounter data...")
-
-    redacted_data = phi_redactor.redact_patient_data(detected_data)
-
-    # Save redacted data
-    with open("patient_case_redacted.json", "w") as f:
-        json.dump(redacted_data, f, indent=2)
-
-    print("✅ PHI Redaction Complete")
-    print("=" * 60)
-    print(f"\n✅ Agent 2 Complete")
-    print(f"   Output: patient_case_redacted.json")
-
     # Check if events meet FDA reporting criteria
     print("\n" + "─" * 80)
     print("FDA REPORTING CRITERIA ASSESSMENT:")
     print("─" * 80)
 
     # Get detected adverse events
-    adverse_events = redacted_data.get("adverse_events_detected", [])
+    adverse_events = detected_data.get("adverse_events_detected", [])
 
     # Check each event for FDA reportability
     reportable_events = []
     for ae in adverse_events:
-        # Agent 1 already determined if event is FDA reportable
+        # Agent 2 already determined if event is FDA reportable
         if ae.get("fda_reportable") or ae.get("severity") == "Serious":
             reportable_events.append(ae)
 
@@ -142,9 +138,9 @@ def main():
     # Define Agent 3 function
     def run_agent3():
         nonlocal agent3_result
-        filler = SimpleComputerUseFiller()
-        agent3_result = filler.auto_submit_to_computer_use(
-            redacted_patient_data=redacted_data,
+        filler = BrowserUseFormFiller()
+        agent3_result = filler.auto_submit_to_browser_use(
+            redacted_patient_data=detected_data,
             portal_url="https://www.accessdata.fda.gov/scripts/medwatch/index.cfm?action=professional.reporting1"
         )
 
