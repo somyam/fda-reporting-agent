@@ -1,6 +1,6 @@
 # VigilantAI
 
-Autonomous adverse event detection and FDA MedWatch reporting, built on Claude.
+Autonomous adverse event detection and FDA MedWatch reporting.
 
 VigilantAI reads raw clinical encounters, de-identifies them locally, works out
 whether anything is reportable to the FDA, and drives a browser to fill out
