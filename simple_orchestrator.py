@@ -4,8 +4,44 @@ Agent 1: PHI Redaction → Agent 2: Adverse Event Detection → Agent 3: Compute
 Redaction runs first so nothing unredacted is ever sent to an external API.
 """
 
+import io
 import json
+import sys
 import threading
+
+
+class _ThreadRoutedStdout:
+    """
+    Route writes from registered threads into their own buffers.
+
+    Agents 3 and 4 run concurrently and both print, which splices Agent 4's
+    bullets into the middle of Agent 3's numbered steps. contextlib.redirect_stdout
+    cannot fix this: it swaps sys.stdout globally, so it would capture both
+    threads. Routing by thread identity lets Agent 3 stream live to the console
+    while Agent 4 accumulates a buffer that is flushed as one block at the end.
+    """
+
+    def __init__(self, real_stdout):
+        self._real = real_stdout
+        self._buffers: dict[int, io.StringIO] = {}
+        self._lock = threading.Lock()
+
+    def register(self, buffer: io.StringIO) -> None:
+        with self._lock:
+            self._buffers[threading.get_ident()] = buffer
+
+    def write(self, data):
+        buffer = self._buffers.get(threading.get_ident())
+        if buffer is not None:
+            return buffer.write(data)
+        return self._real.write(data)
+
+    def flush(self):
+        self._real.flush()
+
+    def __getattr__(self, name):
+        # isatty, encoding, etc. - defer anything else to the real stream.
+        return getattr(self._real, name)
 from agent_1_adverse_event_detector import AdverseEventDetector
 from agent_1_phi_redactor import PHIRedactor
 from browser_use_filler import BrowserUseFormFiller
@@ -144,9 +180,15 @@ def main():
             portal_url="https://www.accessdata.fda.gov/scripts/medwatch/index.cfm?action=professional.reporting1"
         )
 
+    # Agent 3 streams to the console live; Agent 4 is short and buffered, so the
+    # two no longer interleave mid-line.
+    router = _ThreadRoutedStdout(sys.stdout)
+    agent4_output = io.StringIO()
+
     # Define Agent 4 function
     def run_agent4():
         nonlocal agent4_result
+        router.register(agent4_output)
         logger = RealWorldInsightsLogger()
         agent4_result = logger.log_insights(
             patient_data=detected_data,
@@ -159,12 +201,23 @@ def main():
 
     # Start both agents in parallel
     print("\n🚀 Starting parallel execution...")
-    thread3.start()
-    thread4.start()
 
-    # Wait for both to complete
-    thread3.join()
-    thread4.join()
+    # Route stdout only while both threads are live, then restore.
+    sys.stdout = router
+    try:
+        thread3.start()
+        thread4.start()
+        thread3.join()
+        thread4.join()
+    finally:
+        sys.stdout = router._real
+
+    buffered = agent4_output.getvalue()
+    if buffered.strip():
+        print("\n" + "─" * 80)
+        print("AGENT 4: REAL-WORLD INSIGHTS")
+        print("─" * 80)
+        print(buffered, end="" if buffered.endswith("\n") else "\n")
 
     print("\n✅ Both agents completed")
 

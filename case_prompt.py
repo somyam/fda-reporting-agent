@@ -96,6 +96,71 @@ ADVERSE EVENT(S) DETECTED:
     return out
 
 
+# MedWatch Section B outcome checkboxes. These are the machine-readable
+# seriousness classification FDA triages on - a report with a vivid narrative
+# but no boxes ticked can be processed as non-serious, discarding the
+# determination Agent 2 made. Map the structured criteria onto them explicitly
+# rather than leaving the agent to infer which boxes apply.
+_OUTCOME_CHECKBOXES = (
+    ("death", "Death"),
+    ("life-threatening", "Life-threatening"),
+    ("life threatening", "Life-threatening"),
+    ("hospitaliz", "Hospitalization - initial or prolonged"),
+    ("disability", "Disability or Permanent Damage"),
+    ("permanent damage", "Disability or Permanent Damage"),
+    ("congenital", "Congenital Anomaly/Birth Defect"),
+    ("birth defect", "Congenital Anomaly/Birth Defect"),
+    ("intervention", "Required Intervention to Prevent Permanent Impairment/Damage"),
+)
+
+
+def render_outcome_checkboxes(redacted_patient_data: Dict) -> str:
+    """
+    Turn each reportable event's `fda_criteria_met` into explicit tick-these-boxes
+    instructions. Falls back to "Other Serious" when a criterion matches no
+    specific box, so a reportable event is never left unclassified.
+    """
+    events = [
+        ae for ae in redacted_patient_data.get("adverse_events_detected", [])
+        if ae.get("fda_reportable") or ae.get("severity") == "Serious"
+    ]
+    if not events:
+        return ""
+
+    boxes: list[str] = []
+    for ae in events:
+        for criterion in ae.get("fda_criteria_met") or []:
+            text = str(criterion).lower()
+            matched = [label for key, label in _OUTCOME_CHECKBOXES if key in text]
+            boxes.extend(matched or ["Other Serious (Important Medical Event)"])
+
+    # Preserve order, drop duplicates.
+    seen, ordered = set(), []
+    for box in boxes:
+        if box not in seen:
+            seen.add(box)
+            ordered.append(box)
+
+    if not ordered:
+        return ""
+
+    out = (
+        "\nSECTION B - OUTCOME CHECKBOXES (REQUIRED, NOT OPTIONAL):\n"
+        "These boxes are how FDA classifies report seriousness. Writing the\n"
+        "outcome in the narrative is NOT a substitute for ticking them.\n"
+        "Tick exactly these, and no others:\n"
+    )
+    for box in ordered:
+        out += f"  [x] {box}\n"
+    out += (
+        "To tick a box: call read_page, then left_click its ref. After ticking,\n"
+        "call read_page again and confirm each shows as checked before moving on.\n"
+        "If a label on the live form differs slightly in wording, pick the\n"
+        "closest match rather than skipping it.\n"
+    )
+    return out
+
+
 FORM_SECTION_REFERENCE = """FDA MEDWATCH FORM 3500 SECTIONS:
 SECTION A - PATIENT INFORMATION
 - Patient Identifier (use the de-identified ID above)

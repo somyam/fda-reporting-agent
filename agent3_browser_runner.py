@@ -80,6 +80,32 @@ INSPECT_POINT_JS = """
 """
 
 
+# The guard only fires when a submit click is *attempted*. An agent that obeys
+# the prompt and stops voluntarily never trips it, so reached_submit stayed
+# False on a textbook-correct run. Scan the final page instead: ending on a page
+# that bears the terminal control is the real signal.
+FIND_SUBMIT_JS = """
+() => {
+  const out = [];
+  document.querySelectorAll(
+    'button, input[type=submit], input[type=button], [role=button]'
+  ).forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (!rect.width && !rect.height) return;   // ignore hidden controls
+    const text = [
+      el.value, el.innerText, el.getAttribute('aria-label'), el.name, el.id,
+    ].filter(Boolean).join(' ').toLowerCase();
+    out.push({
+      tag: (el.tagName || '').toLowerCase(),
+      type: (el.getAttribute('type') || '').toLowerCase(),
+      text: text.replace(/\\s+/g, ' ').trim().slice(0, 200),
+    });
+  });
+  return out;
+}
+"""
+
+
 def emit(kind: str, **fields) -> None:
     """Write one JSONL event to stdout."""
     sys.stdout.write(json.dumps({"type": kind, **fields}) + "\n")
@@ -286,11 +312,25 @@ async def run(args) -> int:
         outcome = {"success": False, "error": str(exc)}
     except Exception as exc:  # noqa: BLE001 - surfaced to the host verbatim
         outcome = {"success": False, "error": f"{type(exc).__name__}: {exc}"[:600]}
-    finally:
+    # Before tearing the browser down, check whether we ended on the page that
+    # carries the terminal control. An agent that stops voluntarily at Submit
+    # never trips the guard, and that is the correct outcome - not a failure.
+    if not tool.reached_submit:
         try:
-            await tool.cleanup()
-        except Exception as exc:  # cleanup must never mask the real result
-            print(f"[cleanup] {exc}", file=sys.stderr)
+            if tool._page is not None and not tool._page.is_closed():
+                for candidate in await tool._page.evaluate(FIND_SUBMIT_JS):
+                    if SubmitGuardedBrowserTool._is_submit(candidate):
+                        tool.reached_submit = True
+                        tool.submit_element = candidate
+                        emit("submit_page_reached", element=candidate)
+                        break
+        except Exception as exc:
+            print(f"[submit-scan] {exc}", file=sys.stderr)
+
+    try:
+        await tool.cleanup()
+    except Exception as exc:  # cleanup must never mask the real result
+        print(f"[cleanup] {exc}", file=sys.stderr)
 
     emit(
         "result",
@@ -308,7 +348,7 @@ async def run(args) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="VigilantAI Agent 3 browser runner")
     parser.add_argument("--model", default="claude-sonnet-5")
-    parser.add_argument("--max-turns", type=int, default=60)
+    parser.add_argument("--max-turns", type=int, default=120)
     parser.add_argument("--max-tokens", type=int, default=8192)
     parser.add_argument(
         "--allow-submit",

@@ -21,7 +21,11 @@ import shutil
 import subprocess
 from typing import Dict, List, Optional
 
-from case_prompt import FORM_SECTION_REFERENCE, render_case_data
+from case_prompt import (
+    FORM_SECTION_REFERENCE,
+    render_case_data,
+    render_outcome_checkboxes,
+)
 
 # Agent 3's live browser run is PAUSED by default.
 #
@@ -82,6 +86,17 @@ CLICKING - THIS MATTERS:
 * Refs go stale after scrolling, navigation, or any DOM update. Call read_page
   again to refresh them immediately before clicking, not from an earlier turn.
 * To find the Next control, use read_page or find - do not guess its position.
+* A left_click with no ref is a coordinate click. Do not emit one. If you cannot
+  find a ref for something, call read_page again or use find - never fall back
+  to clicking a position.
+
+TEXT FIELDS THAT REFORMAT AS YOU TYPE:
+* Date fields on this form apply an input mask. Using `type` character by
+  character produces mangled values like "03//2/7/20" from "03/27/2024".
+* For any date or otherwise formatted field, use form_input (it sets the value
+  directly) instead of clicking the field and typing.
+* After filling a date, read it back with get_page_text and confirm it matches
+  what you intended. If it is mangled, clear it and set it with form_input.
 
 RECOVERING FROM A WRONG PAGE:
 * `navigate` takes a FULL URL only. There is no "back" action, and
@@ -89,6 +104,7 @@ RECOVERING FROM A WRONG PAGE:
 * To go back one page, use: execute_js with `history.back()`
 * Do NOT re-navigate to the form's start URL to recover. That resets the form
   and discards every field you have entered. Use history.back() instead.
+
 TABS:
 * Some MedWatch links open the form in a NEW TAB. This is handled for you - the
   tool follows the new tab automatically. After a click that seems to do
@@ -111,6 +127,7 @@ you are finished, not as an error to work around.
             prompt += "SUBMISSION: You are authorized to click the final Submit button.\n\n"
 
         prompt += render_case_data(redacted_patient_data)
+        prompt += render_outcome_checkboxes(redacted_patient_data)
         prompt += "\n" + FORM_SECTION_REFERENCE
         prompt += f"""
 ADDITIONAL CONTEXT AVAILABLE:
@@ -194,7 +211,7 @@ Begin by navigating to the portal and calling read_page.
         portal_url: str = MEDWATCH_URL,
         allow_submit: bool = False,
         model: str = "claude-sonnet-5",
-        max_turns: int = 60,
+        max_turns: int = 120,
         live: Optional[bool] = None,
     ) -> Dict:
         """
@@ -321,6 +338,10 @@ Begin by navigating to the portal and calling read_page.
                 print("\n🛑 SUBMIT GUARD TRIPPED — reached the final Submit control")
                 print(f"   element: <{element.get('tag')}> {element.get('text', '')[:70]!r}")
                 print("   Form is filled and awaiting human review.\n")
+            elif kind == "submit_page_reached":
+                element = event.get("element") or {}
+                print("\n🏁 Reached the Submit page and stopped without clicking")
+                print(f"   control: <{element.get('tag')}> {element.get('text', '')[:70]!r}\n")
             elif kind == "result":
                 result = event
 
@@ -341,8 +362,8 @@ Begin by navigating to the portal and calling read_page.
             if result.get("reached_submit") and not result.get("submitted"):
                 print("   Reached Submit and stopped, as designed.")
             elif not result.get("reached_submit"):
-                print("   ⚠️  Finished WITHOUT reaching Submit — review whether the "
-                      "form was actually completed.")
+                print("   ⚠️  Finished without reaching the Submit page — the form is "
+                      "probably incomplete. Review before filing.")
         else:
             print(f"\n❌ Agent 3 failed: {result.get('error')}")
 

@@ -392,20 +392,20 @@
         "dose": "300mg (after 600mg loading dose)",
         "route": "Subcutaneous injection"
       },
-      "adverse_event_description": "Mild bilateral dry eye and conjunctival injection developing after initiation of dupilumab therapy. Patient reported mild eye dryness, managed with preservative-free artificial tears. Exam showed mild bilateral conjunctival injection without discharge; visual acuity normal at this stage.",
+      "adverse_event_description": "Mild bilateral dry eye with conjunctival injection, noted at routine follow-up approximately 6 weeks after initiating dupilumab. Patient managed with preservative-free artificial tears with some symptomatic relief. This represents the early/mild manifestation of dupilumab-associated ocular surface disease.",
       "severity": "Mild",
       "outcome": "Not Recovered",
       "causality": "Probable",
       "timeline": {
-        "drug_start_date": "2023-05-08",
-        "event_onset_date": "2024-03-27",
+        "drug_start_date": "2023-09-05",
+        "event_onset_date": "2024-03-27 (reported at visit, exact onset unclear, described as recent)",
         "drug_stop_date": null,
-        "time_to_onset": "Reported at first follow-up visit after dupilumab initiation (dry eye symptoms noted at visit, exact onset unspecified but preceding this visit)"
+        "time_to_onset": "Approximately 6-7 months after drug initiation (per visit sequence); consistent with typical onset window (weeks-months) for dupilumab-associated conjunctivitis"
       },
-      "clinical_evidence": "New onset of eye dryness and conjunctival injection following initiation of dupilumab, with no prior history of eye complaints. Provider explicitly attributed this to dupilumab as a 'known side effect' in the assessment. This mild finding subsequently progressed to a severe conjunctivitis at the next visit, supporting a causal, dose/time-dependent relationship.",
+      "clinical_evidence": "New onset of bilateral conjunctival injection and dry eye symptoms in a patient with no prior history of eye disease, occurring after initiation of dupilumab. Provider explicitly documented this as 'likely related to dupilumab (known side effect)' in the assessment. No alternative cause (contact lens use, infection, trauma) identified at this visit.",
       "fda_reportable": false,
       "fda_criteria_met": [],
-      "confidence_level": "Medium"
+      "confidence_level": "High"
     },
     {
       "suspect_drug": {
@@ -414,21 +414,21 @@
         "dose": "300mg every 2 weeks",
         "route": "Subcutaneous injection"
       },
-      "adverse_event_description": "Severe bilateral conjunctivitis with periorbital edema, chemosis, mucopurulent discharge, photophobia, foreign body sensation, superficial punctate keratitis on fluorescein staining, and decreased visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Progressed over 2 weeks despite artificial tear use. Required urgent same-day ophthalmology referral and permanent discontinuation of dupilumab.",
+      "adverse_event_description": "Progression to severe bilateral conjunctivitis with periorbital edema, chemosis, thick mucopurulent discharge, photophobia, foreign body sensation, and superficial punctate keratitis on fluorescein staining. Associated with measurable decline in visual acuity (20/30 OD, 20/40 OS from baseline 20/20 bilaterally). Symptoms progressively worsened over 2 weeks despite continued artificial tear use, occurring while patient remained on dupilumab (last dose 5 days prior to presentation). Required urgent same-day ophthalmology referral and discontinuation of dupilumab.",
       "severity": "Serious",
       "outcome": "Recovering",
       "causality": "Probable",
       "timeline": {
-        "drug_start_date": "2023-05-08",
-        "event_onset_date": "2024-04-11 (approx. 2 weeks prior to urgent visit on 2024-04-25, per patient report of progressive worsening)",
-        "drug_stop_date": "2024-04-25",
-        "time_to_onset": "Progressive worsening over 2 weeks, evolving from previously documented mild conjunctival irritation noted at prior visit; occurred while on ongoing maintenance dosing (last injection 5 days prior to presentation)"
+        "drug_start_date": "2023-09-05",
+        "event_onset_date": "2024-04-11 (approximately 2 weeks prior to urgent visit, per patient report)",
+        "drug_stop_date": "2024-01-03",
+        "time_to_onset": "Progressive worsening of pre-existing mild dupilumab-associated dry eye/conjunctivitis over approximately 2 weeks, occurring several months after drug initiation and after prior milder ocular symptoms were noted"
       },
-      "clinical_evidence": "Clear temporal progression from mild dry eye/conjunctival injection (previous visit) to severe bilateral conjunctivitis with corneal involvement (punctate keratitis) and objective decline in visual acuity, occurring during ongoing dupilumab therapy. Symptoms did not respond to conservative measures (artificial tears). Positive dechallenge: dupilumab was discontinued specifically due to this event, with clinician documentation explicitly stating 'likely dupilumab-related' and 'known serious adverse effect.' Conjunctivitis (including severe/keratitis variants) is a recognized class effect of dupilumab, strengthening causality. Case was reported to FDA and manufacturer per documentation, and required urgent specialist intervention.",
+      "clinical_evidence": "Clear temporal relationship: symptoms worsened significantly while patient remained on dupilumab therapy, following a preceding milder presentation of dry eye/conjunctival injection at the prior visit (positive 'build-up' pattern). Corneal involvement (punctate keratitis) and visual acuity changes indicate a vision-threatening process. Provider explicitly diagnosed 'severe bilateral conjunctivitis, likely dupilumab-related' and immediately discontinued the drug, arranged urgent ophthalmology referral, and reported the event to FDA and the manufacturer. Positive dechallenge (drug stopped due to event) supports causal relationship. Conjunctivitis (including severe forms) is a well-documented adverse effect of dupilumab in atopic dermatitis patients, and this presentation with keratitis and visual acuity changes represents a serious escalation warranting urgent intervention.",
       "fda_reportable": true,
       "fda_criteria_met": [
         "intervention required (urgent ophthalmology referral, drug discontinuation)",
-        "disability (temporary decreased visual acuity, corneal involvement)"
+        "disability (temporary decline in visual acuity, potential for permanent corneal damage if untreated)"
       ],
       "confidence_level": "High"
     }
