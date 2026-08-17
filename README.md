@@ -126,23 +126,6 @@ Outputs: `patient_case_redacted.json`, `adverse_events_detected.json`,
 
 ---
 
-## Known limitations
-
-**Multi-page traversal is proven by one successful live run.** It completes the
-form reliably in that run (110 turns, 132 actions), but regression testing is not
-implemented in this repo. A local mock of the form would let you validate 
-changes without touching FDA — recommended before full use.
-
-**FDA rate-limits repeated automated runs.** Several runs in quick succession
-return `apology_objects/excessive-requests-apology.html`, which surfaces as
-unrelated-looking browser errors.
-
-**Screenshots are not pruned from context.** `browser_use_demo/loop.py` defines
-`_maybe_filter_to_n_most_recent_images` but never calls it. Leading with DOM
-calls keeps screenshots rare, but a long enough session could grow context.
-
----
-
 ## Disclaimer
 
 Demonstration system built on **synthetic** patient data
