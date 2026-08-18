@@ -2,10 +2,16 @@
 
 Autonomous adverse event detection and FDA MedWatch reporting.
 
+Estimated 90-99% adverse events go unreported. It takes nurses 10-15 minutes and they rarely get trained in reporting.
+It is voluntary except for severe cases. 
+
 VigilantAI reads raw clinical encounters, de-identifies them locally, works out
 whether anything is reportable to the FDA, and drives a browser to fill out
-MedWatch Form 3500 — stopping before submission for human review. It feeds a text
-file adverse and beneficial effects as RWI for pharma diligence. 
+MedWatch Form 3500. It feeds a text file adverse and beneficial effects as RWI for pharma diligence. 
+
+<video src="https://github.com/user-attachments/assets/c2928036-4c99-4a94-bee0-d489ce76d17c" autoplay loop muted playsinline width="100%"></video>
+
+
 
 ---
 
